@@ -24,8 +24,10 @@ module Captcha
       [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT],
       Fiddle::TYPE_VOIDP,
     )
-    img = new_captcha.call(SecureRandom.hex(10), code.to_s, width, height).to_s
-    img.start_with?('iV') ? img : nil
+    pointer = new_captcha.call(SecureRandom.hex(10), code.to_s, width, height)
+    image = pointer.to_s
+    Fiddle.free(pointer.to_i)
+    image
   end
 end
 
