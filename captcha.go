@@ -1,12 +1,10 @@
 package main
 
 import (
-	// #include <stdlib.h>
 	"C"
 	"bytes"
 	"encoding/base64"
 	"image/png"
-	"unsafe"
 
 	"github.com/dchest/captcha"
 )
@@ -24,9 +22,7 @@ func NewCaptcha(identifier, _data *C.char, width, height C.int) *C.char {
 	img := captcha.NewImage(C.GoString(identifier), numbers, int(width), int(height))
 	var buf bytes.Buffer
 	png.Encode(&buf, img)
-	str := C.CString(base64.StdEncoding.EncodeToString(buf.Bytes()))
-	defer C.free(unsafe.Pointer(str))
-	return str
+	return C.CString(base64.StdEncoding.EncodeToString(buf.Bytes()))
 }
 
 func main() {}
